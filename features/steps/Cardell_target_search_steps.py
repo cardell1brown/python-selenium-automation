@@ -8,22 +8,27 @@ def open_target(context):
     context.driver.get('https://www.target.com/')
 
 
-@when('Search for product')
-def search_product(context):
+@when('Search for {product}')
+def search_product(context, product):
     # find search field and enter text
-    context.driver.find_element(By.ID, 'search').send_keys('tea')
+    context.driver.find_element(By.ID, 'search').send_keys(product)
     # click search
     context.driver.find_element(By.XPATH, "//button[@data-test='@web/Search/SearchButton']").click()
     # wait for the page with search results to load
     sleep(6)
 
 
-@then('Verify search worked')
-def verify_search_results(context):
-    # verify
-    expected_text = 'tea'
+@then('Verify search worked for {product}')
+def verify_search_results(context, product):
     actual_text = context.driver.find_element(By.XPATH, "//div[@data-test='resultsHeading']").text
-    assert expected_text in actual_text, f'Expected {expected_text} is not in actual text {actual_text}'
+    assert product in actual_text, f'Expected {product} is not in actual text {actual_text}'
+
+    print('Text case passed')
+
+@then('Verify correct url is displayed for {product}')
+def verify_url(context, product):
+    url = context.driver.current_url
+    assert product in url, f'Expected {product} is not in current {url}'
 
     print('Text case passed')
 

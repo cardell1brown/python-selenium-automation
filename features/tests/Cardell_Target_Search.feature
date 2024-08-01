@@ -6,4 +6,3 @@ Feature: Target main page search tests
     Given Open target main page
     When Search for product
     Then Verify search worked
-
